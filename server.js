@@ -1,5 +1,11 @@
-const hello = () => {
-  console.log('hello world')
-}
+const express = require('express')
+const bodyParser = require('body-parser')
+const app = express() 
 
-hello();
+const PORT = process.env.PORT || 4000;
+
+app.get('/', (req, res) => {
+  res.send('<h1>Hello World!</h1>')
+})
+
+app.listen(PORT, () => console.log(`Server connected on port : ${PORT}`))
