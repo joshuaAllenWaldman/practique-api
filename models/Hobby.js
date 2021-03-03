@@ -16,14 +16,6 @@ const hobbySchema = new mongoose.Schema({
   longTermGoals: {
     type: [String]
   },
-  practiceHourTracker: {
-    type: Number,
-    default: 0
-  },
-  sessionCount: {
-    type: Number,
-    default: 0 
-  },
 }, {timestamps: true})
 
 const Hobby = mongoose.model('Hobby', hobbySchema)

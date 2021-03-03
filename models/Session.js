@@ -22,6 +22,10 @@ const sessionSchema = mongoose.Schema({
   sessionGoals: {
     type: [String],
   },
+  startTime: {
+    type: Date,
+    required: true
+  },
   duration: {
     type: Number,
     default: 0
