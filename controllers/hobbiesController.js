@@ -1,5 +1,6 @@
 const db = require('../models');
 
+//Hobby index, checks for login status first
 const index = (req, res) => {
   if (!req.session.currentUser){
     //redirect
@@ -7,26 +8,30 @@ const index = (req, res) => {
     res.send('Not logged In')
     return;
   }
-  db.Hobby.find({user: req.session.currentUser._id}, (err, allHobbies) => {
-    if (err) return console.log(err);
-    res.json(allHobbies);
-  })
+  //Finds hobbies associated with current user
+  db.Hobby.find({user: req.session.currentUser._id}, 
+    (err, allHobbies) => {
+      if (err) return console.log(err);
+      res.json(allHobbies);
+    })
 }
 
 const show = (req, res) => {
+  console.log('show hobby')
   if (!req.session.currentUser){
-    //redirect
     res.status(400);
     res.send('Not logged In')
     return;
   }
+  //Finds hobby matching current param id and belonging to user
   db.Hobby.findOne({
     $and: [
       {user: req.session.currentUser._id},
-      {_id: req.params._id}
+      {_id: req.params.id}
     ]
   }, (err, foundHobby) => {
     if(err) console.log(err);
+    console.log(foundHobby)
     res.json(foundHobby)
   })
 }

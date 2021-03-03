@@ -25,7 +25,7 @@ app.get('/', (req, res) => {
 
 app.use('/api/v1/users', routes.users)
 app.use('/api/v1/hobbies', routes.hobbies)
-app.use ('/api/v1/sessions', routes.sessions)
+
 
 
 

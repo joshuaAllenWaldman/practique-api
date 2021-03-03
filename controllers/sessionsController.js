@@ -1,8 +1,8 @@
 const db = require('../models');
+//hobbies/:id/sessions/ 
 
 const index = (req, res) => {
   if (!req.session.currentUser){
-    //redirect
     res.status(400);
     res.send('Not logged In')
     return;
@@ -10,7 +10,7 @@ const index = (req, res) => {
   db.Session.find({
     $and: [
       {user: req.session.currentUser._id},
-      {hobby: req.query.hobby}
+      {hobby: req.params.id}
     ]
   }, (err, allSessions) => {
     if(err) return console.log(err);
@@ -20,12 +20,11 @@ const index = (req, res) => {
 
 const show = (req, res) => {
   if (!req.session.currentUser){
-    //redirect
     res.status(400);
     res.send('Not logged In')
     return;
   }
-  db.Session.findById(req.params.id, (err, foundSession) => {
+  db.Session.findById(req.params.seshId, (err, foundSession) => {
     if (err) return console.log(err);
     res.json(foundSession)
   })
@@ -33,14 +32,16 @@ const show = (req, res) => {
 
 const create = (req, res) => {
   if (!req.session.currentUser){
-    //redirect
     res.status(400);
     res.send('Not logged In')
     return;
   }
+  console.log('create route hit after login validation')
   const sessionObj = req.body;
   sessionObj.user = req.session.currentUser._id
-  sessionObj.hobby = req.query.hobby
+  sessionObj.hobby = req.params.id
+  // console.log('++++++++++++++++', req)
+  console.log('req params', req.params)
   db.Session.create(sessionObj, (err, newSession) => {
     if(err) return console.log(err);
     res.json(newSession);
@@ -48,8 +49,14 @@ const create = (req, res) => {
 }
 
 const update = (req, res) => {
+  if (!req.session.currentUser){
+    res.status(400);
+    res.send('Not logged In')
+    return;
+  }
+  
   db.Session.findByIdAndUpdate(
-    req.params.id,
+    req.params.seshId,
     req.body,
     {new: true},
     (err, updatedSession) => {
@@ -60,7 +67,12 @@ const update = (req, res) => {
 }
 
 const destroy = (req, res) => {
-  db.Session.findByIdAndDelete(req.params.id, (err, deletedSession) => {
+  if (!req.session.currentUser){
+    res.status(400);
+    res.send('Not logged In')
+    return;
+  }
+  db.Session.findByIdAndDelete(req.params.seshId, (err, deletedSession) => {
     if (err) return console.log(err);
     res.json(deletedSession)
   })
