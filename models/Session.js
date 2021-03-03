@@ -7,10 +7,12 @@ const sessionSchema = mongoose.Schema({
   hobby: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Hobby',
+    required: true
   },
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
+    ref: 'User',
+    required: true
   },
   challengeLevel: {
     type: Number,

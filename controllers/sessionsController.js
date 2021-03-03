@@ -1,13 +1,30 @@
 const db = require('../models');
 
 const index = (req, res) => {
-  db.Session.find({}, (err, allSessions) => {
+  if (!req.session.currentUser){
+    //redirect
+    res.status(400);
+    res.send('Not logged In')
+    return;
+  }
+  db.Session.find({
+    $and: [
+      {user: req.session.currentUser._id},
+      {hobby: req.query.hobby}
+    ]
+  }, (err, allSessions) => {
     if(err) return console.log(err);
     res.json(allSessions)
   })
 }
 
 const show = (req, res) => {
+  if (!req.session.currentUser){
+    //redirect
+    res.status(400);
+    res.send('Not logged In')
+    return;
+  }
   db.Session.findById(req.params.id, (err, foundSession) => {
     if (err) return console.log(err);
     res.json(foundSession)
@@ -15,7 +32,16 @@ const show = (req, res) => {
 }
 
 const create = (req, res) => {
-  db.Session.create(req.body, (err, newSession) => {
+  if (!req.session.currentUser){
+    //redirect
+    res.status(400);
+    res.send('Not logged In')
+    return;
+  }
+  const sessionObj = req.body;
+  sessionObj.user = req.session.currentUser._id
+  sessionObj.hobby = req.query.hobby
+  db.Session.create(sessionObj, (err, newSession) => {
     if(err) return console.log(err);
     res.json(newSession);
   })
