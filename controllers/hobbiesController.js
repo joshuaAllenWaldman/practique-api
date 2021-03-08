@@ -17,7 +17,6 @@ const index = (req, res) => {
 }
 
 const show = (req, res) => {
-  console.log('show hobby')
   if (!req.session.currentUser){
     res.status(400);
     res.send('Not logged In')
@@ -31,7 +30,6 @@ const show = (req, res) => {
     ]
   }, (err, foundHobby) => {
     if(err) console.log(err);
-    console.log(foundHobby)
     res.json(foundHobby)
   })
 }
@@ -58,12 +56,14 @@ const update = (req, res) => {
     res.send('Not logged In')
     return;
   }
+  console.log(req.params)
   db.Hobby.findByIdAndUpdate(
     req.params.id,
     req.body,
     {new: true},
     (err, updatedHobby) => {
       if (err) return console.log(err)
+      console.log('Hit Update', updatedHobby)
       res.json(updatedHobby)
     }
   )
@@ -75,10 +75,13 @@ const destroy = (req, res) => {
     res.send('Not logged In')
     return;
   }
-  db.Hobby.findByIdAndDelete(req.params.id, (err, deletedHobby) => {
+  db.Session.deleteMany({hobby: req.params.id}, (err, deletedSessions) => {
+    if (err) return console.log(err)
+    db.Hobby.findByIdAndDelete(req.params.id, (err, deletedHobby) => {
     if (err) return console.log(err);
-    res.json(deletedHobby)
+    res.status(200)
   })
+  }) 
 }
 
 

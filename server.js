@@ -1,18 +1,24 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const session = require('express-session')
+const cors = require('cors')
 const app = express() 
 
 const PORT = process.env.PORT || 4000;
 const routes = require('./routes')
 
 
+app.use(cors({
+  credentials: true,
+  origin: 'http://localhost:3000'
+}))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(session({
   secret: 'barkwoofbark',
   resave: false,
   saveUninitialized: false,
+  unset: 'destroy',
   cookie: {
     maxAge: 1000 * 60 * 60 * 24 * 7 * 2, //valid for 2 weeks. 
   }

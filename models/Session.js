@@ -16,7 +16,7 @@ const sessionSchema = mongoose.Schema({
   },
   challengeLevel: {
     type: Number,
-    default: 0
+    default: 1
   },
   notes: {
     type: String,
@@ -26,13 +26,17 @@ const sessionSchema = mongoose.Schema({
   },
   startTime: {
     type: Date,
-    required: true
+    default: Date.now()
   },
   duration: {
     type: Number,
     default: 0
+  },
+  date: {
+    type: Date,
+    default: Date.now
   }
-}, {timestamp: true})
+}, {timestamps: true})
 
 const Session = mongoose.model('Session', sessionSchema);
 

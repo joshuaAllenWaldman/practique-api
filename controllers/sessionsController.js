@@ -13,7 +13,7 @@ const index = (req, res) => {
       {hobby: req.params.id}
     ]
   }, (err, allSessions) => {
-    if(err) return console.log(err);
+    if(err) return console.log('session index err', err);
     res.json(allSessions)
   })
 }
@@ -36,8 +36,10 @@ const create = (req, res) => {
     res.send('Not logged In')
     return;
   }
-  console.log('create route hit after login validation')
+  console.log(req.body)
   const sessionObj = req.body;
+  sessionObj.duration = parseInt(req.body.duration)
+  sessionObj.challengeLevel = parseInt(req.body.challengeLevel)
   sessionObj.user = req.session.currentUser._id
   sessionObj.hobby = req.params.id
   // console.log('++++++++++++++++', req)
