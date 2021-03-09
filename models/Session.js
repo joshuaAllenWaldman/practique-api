@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const sessionSchema = mongoose.Schema({
   nickName: {
-    type: String  
+    type: String, 
   },
   hobby: {
     type: mongoose.Schema.Types.ObjectId,

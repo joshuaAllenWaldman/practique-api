@@ -18,7 +18,10 @@ const create = (req, res) => {
   console.log(req.body)
   db.User.create(req.body, (err, newUser) => {
     if (err) return console.log(err);
+    req.session.currentUser = newUser;
+    console.log(newUser)
     res.json(newUser)
+    return console.log('Account Created and Logged In')
   })
 }
 
